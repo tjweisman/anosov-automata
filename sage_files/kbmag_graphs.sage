@@ -23,7 +23,6 @@ def run_kbmag(filename):
     autgroup = path.join(KBMAG_PATH, "autgroup")
     gpgeowa = path.join(KBMAG_PATH, "gpgeowa")
 
-    print autgroup
 
     subprocess.call([autgroup, filename])
     subprocess.call([gpgeowa, filename])
@@ -38,16 +37,23 @@ def get_graph_from_fsa(fsa_file):
             vert_dict = build_dict(transitions, labels, to_filter = [0])
             return DiGraph(vert_dict, format = "dict_of_dicts")
 
+def build_and_draw_graph(filename):
+    run_kbmag(filename)
+    G = get_graph_from_fsa(filename + ".geowa")
+    H = remove_long_paths(G, 1)
+    G.show(method = "js")
+    H.show(method = "js")
+
 def remove_long_paths(G, root, edge_ties=True):
     H = DiGraph([])
     H.add_vertices(G.vertices())
 
     #Dijkstra's algorithm!
-    distance = {-1:False for v in G.vertices()}
+    distance = {}
     marked = {v:False for v in G.vertices()}
 
     marked[root] = True
-    distance[root] = -1
+    distance[root] = 0
     vertex_queue = deque([root])
     while len(vertex_queue) > 0:
         v = vertex_queue.popleft()
