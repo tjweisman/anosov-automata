@@ -14,7 +14,9 @@ def build_dict(v_list, labels, to_filter = []):
         n_dict = {}
         for label, vertex in zip(labels, neighbors):
             if vertex not in to_filter:
-                n_dict[vertex] = label
+                if vertex not in n_dict:
+                    n_dict[vertex] = []
+                n_dict[vertex].append(label)
                 
         v_dict[i+1] = n_dict
     return v_dict

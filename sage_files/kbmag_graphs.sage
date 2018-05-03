@@ -72,5 +72,3 @@ def remove_long_paths(G, root, edge_ties=True):
         vertex_queue.extend(to_visit)
 
     return H
-
-
